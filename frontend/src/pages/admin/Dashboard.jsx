@@ -25,7 +25,6 @@ const Dashboard = () => {
           }));
 
           setUsers(userList);
-          console.log("✅ All users with userData:", userList);
         } else {
           console.log("No users found");
         }

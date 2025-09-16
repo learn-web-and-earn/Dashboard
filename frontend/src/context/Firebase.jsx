@@ -32,7 +32,6 @@ export const FirebaseProvider = ({ children }) => {
           );
           if (snapshot.exists()) {
             setUserData(snapshot.val());
-            console.log("✅ UserData fetched:", snapshot.val());
           } else {
             console.log("⚠️ No userData found for this user");
             setUserData(null);
