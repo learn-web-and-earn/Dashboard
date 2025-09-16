@@ -1,14 +1,15 @@
-import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+// App.jsx
+import React, { useEffect, useState } from "react";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import Home from "./pages/user/Home";
 import Login from "./pages/user/Login";
 import Dashboard from "./pages/admin/Dashboard";
 import { useFirebase } from "./context/Firebase";
 
-// User pages
+// User pages (placeholders)
 const UserProfile = () => <h1>User Profile</h1>;
 
-// Admin pages
+// Admin pages (placeholders)
 const AdminUsers = () => <h1>Manage Users</h1>;
 
 // Auth pages
@@ -42,18 +43,59 @@ const ProtectedAdmin = ({ isAdmin, children }) => {
 };
 
 const App = () => {
-  const { userData, loading } = useFirebase();
+  const { user, userData, loading } = useFirebase();
+  const navigate = useNavigate();
 
-  if (loading) {
-    return <p>Loading...</p>; // ✅ show loading state
+  // State used to hold the UI for an extra 1 second when there's no user.
+  const [holding, setHolding] = useState(true);
+
+  // When `loading` completes, decide what to do next.
+  useEffect(() => {
+    // If still loading auth, keep holding UI
+    if (loading) {
+      setHolding(true);
+      return;
+    }
+
+    // loading finished
+    if (!user) {
+      // No user: hold for 1s then redirect to /login
+      const t = setTimeout(() => {
+        setHolding(false);
+        navigate("/login", { replace: true });
+      }, 1000);
+      return () => clearTimeout(t);
+    }
+
+    // We have a user: stop holding immediately (don't redirect)
+    setHolding(false);
+
+    // If user is admin, make sure root route goes to /admin.
+    // We won't navigate automatically here; root rendering will handle it.
+  }, [loading, user, navigate]);
+
+  // While auth is loading or while we are "holding" the UI, show a loader
+  if (loading || holding) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        {/* Replace with your loader component if you want */}
+        <div className="flex items-center space-x-3">
+          <div className="animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-transparent" />
+          <span>Checking authentication...</span>
+        </div>
+      </div>
+    );
   }
 
+  // At this point: loading === false and holding === false.
+  // If there's still no user, we've already navigated to /login in the effect.
+  // So here we can safely compute isAdmin and render routes.
   const isAdmin = userData?.isAdmin === true;
 
   return (
     <Routes>
       {/* Root route: redirect admin → dashboard, normal user → home */}
-      <Route path="/" element={isAdmin ? <Navigate to="/admin" /> : <Home />} />
+      <Route path="/" element={isAdmin ? <Navigate to="/admin" replace /> : <Home />} />
 
       {/* Public routes */}
       <Route path="/login" element={<Login />} />
