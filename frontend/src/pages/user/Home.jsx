@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useFirebase } from "@/context/Firebase"; // adjust path
 import { useNavigate } from "react-router-dom";
+import Navbar from "@/components/custom/Navbar";
 
 const Home = () => {
   const { user, loading, logout } = useFirebase(); // ✅ use context
@@ -23,6 +24,7 @@ const Home = () => {
 
   return (
     <>
+    <Navbar />
     <div className="flex flex-col items-center justify-center h-screen space-y-4">
       <h2 className="text-xl font-semibold">Welcome, {user?.email}</h2>
       <button
