@@ -5,6 +5,7 @@ import Home from "./pages/user/Home";
 import Login from "./pages/user/Login";
 import Dashboard from "./pages/admin/Dashboard";
 import { useFirebase } from "./context/Firebase";
+import Users from "./pages/admin/AdminUsers";
 
 // User pages (placeholders)
 const UserProfile = () => <h1>User Profile</h1>;
@@ -32,7 +33,7 @@ const AdminLayout = () => (
   <Routes>
     <Route path="/" element={<Dashboard />} />
     <Route path="dashboard" element={<Dashboard />} />
-    <Route path="users" element={<AdminUsers />} />
+    <Route path="users" element={<Users />} />
     <Route path="*" element={<NotFound />} />
   </Routes>
 );

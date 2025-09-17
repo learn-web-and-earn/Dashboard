@@ -66,12 +66,12 @@ const Navbar = () => {
             </li>
             <li>
               <Link
-                to="/profile"
+                to="/admin/users"
                 className="flex items-center gap-3 hover:text-teal-300 transition"
                 onClick={() => setIsOpen(false)}
               >
                 <User className="h-5 w-5" />
-                Profile
+                Users
               </Link>
             </li>
             <li>
