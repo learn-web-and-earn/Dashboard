@@ -1,4 +1,3 @@
-// FirebaseContext.jsx
 import { createContext, useContext, useEffect, useState } from "react";
 import { app } from "@/firebase/firebase";
 import {
@@ -18,7 +17,8 @@ export const FirebaseProvider = ({ children }) => {
   const db = getDatabase(app);
 
   const [user, setUser] = useState(null);
-  const [userData, setUserData] = useState(null); // ✅ store extra userData
+  const [userData, setUserData] = useState(null);
+  const [allUsers, setAllUsers] = useState([]); // ✅ store all users
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -27,20 +27,30 @@ export const FirebaseProvider = ({ children }) => {
 
       if (currentUser) {
         try {
+          // fetch current userData
           const snapshot = await get(
             child(ref(db), `users/${currentUser.uid}/userData`)
           );
           if (snapshot.exists()) {
             setUserData(snapshot.val());
           } else {
-            console.log("⚠️ No userData found for this user");
             setUserData(null);
           }
+
+          // fetch all users
+          const allUsersSnapshot = await get(ref(db, "users"));
+          if (allUsersSnapshot.exists()) {
+            const usersArray = Object.values(allUsersSnapshot.val());
+            setAllUsers(usersArray);
+          } else {
+            setAllUsers([]);
+          }
         } catch (error) {
-          console.error("❌ Error fetching userData:", error);
+          console.error("❌ Error fetching data:", error);
         }
       } else {
         setUserData(null);
+        setAllUsers([]);
       }
 
       setLoading(false);
@@ -49,14 +59,12 @@ export const FirebaseProvider = ({ children }) => {
     return () => unsubscribe();
   }, [auth, db]);
 
-  const login = (email, password) =>
-    signInWithEmailAndPassword(auth, email, password);
-
+  const login = (email, password) => signInWithEmailAndPassword(auth, email, password);
   const logout = () => signOut(auth);
 
   return (
     <FirebaseContext.Provider
-      value={{ app, auth, user, userData, loading, login, logout }}
+      value={{ app, auth, user, userData, allUsers, loading, login, logout }}
     >
       {children}
     </FirebaseContext.Provider>
