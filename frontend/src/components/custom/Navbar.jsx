@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Menu, X, LayoutDashboard, User, Settings, LogOut, Loader2 } from "lucide-react";
+import { Menu, X, LayoutDashboard, User, LogOut, Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useFirebase } from "@/context/Firebase";
 
@@ -72,16 +72,6 @@ const Navbar = () => {
               >
                 <User className="h-5 w-5" />
                 Users
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/settings"
-                className="flex items-center gap-3 hover:text-teal-300 transition"
-                onClick={() => setIsOpen(false)}
-              >
-                <Settings className="h-5 w-5" />
-                Settings
               </Link>
             </li>
           </ul>

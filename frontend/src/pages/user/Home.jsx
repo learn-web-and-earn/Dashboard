@@ -24,7 +24,6 @@ const Home = () => {
 
   return (
     <>
-    <Navbar />
     <div className="flex flex-col items-center justify-center h-screen space-y-4">
       <h2 className="text-xl font-semibold">Welcome, {user?.email}</h2>
       <button

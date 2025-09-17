@@ -6,25 +6,22 @@ import Login from "./pages/user/Login";
 import Dashboard from "./pages/admin/Dashboard";
 import { useFirebase } from "./context/Firebase";
 import Users from "./pages/admin/AdminUsers";
+import Error from "./pages/Error";
 
 // User pages (placeholders)
 const UserProfile = () => <h1>User Profile</h1>;
 
-// Admin pages (placeholders)
-const AdminUsers = () => <h1>Manage Users</h1>;
 
 // Auth pages
 const Register = () => <h1>Register</h1>;
 
-// Error page
-const NotFound = () => <h1>404 - Page Not Found</h1>;
 
 // User layout
 const UserLayout = () => (
   <Routes>
     <Route path="/" element={<Home />} />
     <Route path="profile" element={<UserProfile />} />
-    <Route path="*" element={<NotFound />} />
+    <Route path="*" element={<Error />} />
   </Routes>
 );
 
@@ -34,7 +31,7 @@ const AdminLayout = () => (
     <Route path="/" element={<Dashboard />} />
     <Route path="dashboard" element={<Dashboard />} />
     <Route path="users" element={<Users />} />
-    <Route path="*" element={<NotFound />} />
+    <Route path="*" element={<Error />} />
   </Routes>
 );
 
@@ -116,7 +113,7 @@ const App = () => {
       />
 
       {/* Global catch-all */}
-      <Route path="*" element={<NotFound />} />
+      <Route path="*" element={<Error />} />
     </Routes>
   );
 };
